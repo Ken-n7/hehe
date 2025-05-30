@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>lol</title>
+</head>
+<body>
+  <button id="button" flex style="height: 100px; width: 100%; font-size: 30px">
+    pidlit pidlita adi
+  </button>
+  <h1 id="lol">
+    Hello, World!
+  </h1>
+  
+</body>
+<script>
+  const lol = document.getElementById('lol');
+  const button = document.getElementById('button');
+  let count = 0;
+  let size = 30;
+
+  button.addEventListener('click', function(){
+    size += 10;
+    lol.textContent = 'Pakyu ka🖕🏻';
+    lol.style.fontSize = `${size}px`;
+    button.textContent = 'pidlit pidlita pa adi 🖕🏻'
+    if(count % 2 == 0){
+      lol.style.color = 'red';
+    }else{
+      lol.style.color = 'black';
+    }
+    count += 1;
+    });
+</script>
+</html>
