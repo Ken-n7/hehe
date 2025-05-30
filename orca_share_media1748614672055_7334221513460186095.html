@@ -68,6 +68,18 @@
       text-shadow: 0 0 10px rgba(255,255,255,0.3);
       transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     }
+    .fixed-text {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: transparent;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      z-index: 1000;
+    }
     
     .rainbow-bg {
       position: fixed;
@@ -130,6 +142,7 @@
       Hello, World!
     </h1>
   </div>
+  <div class="fixed-text">©Kinet</div>
   
   <script>
     const lol = document.getElementById('lol');
