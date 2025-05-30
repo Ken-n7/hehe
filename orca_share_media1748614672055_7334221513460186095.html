@@ -136,11 +136,11 @@
     const button = document.getElementById('button');
     const rainbowBg = document.querySelector('.rainbow-bg');
     let count = 0;
-    let size = 200;
+    let size = 400;
 
     button.addEventListener('click', function(){
       // Smooth size increase
-      size += 100;
+      size += 200;
       
       button.style.width = `${300 + count * 5}px`;
       button.style.height = `${100 + count * 3}px`;
