@@ -58,7 +58,7 @@
     }
     
     #lol {
-      font-size: 40px;
+      font-size: 100px;
       font-weight: bold;
       text-align: center;
       color: white;
@@ -136,12 +136,12 @@
     const button = document.getElementById('button');
     const rainbowBg = document.querySelector('.rainbow-bg');
     let count = 0;
-    let size = 100;
+    let size = 200;
 
     button.addEventListener('click', function(){
       // Smooth size increase
-      size += 25;
-      lol.style.fontSize = `${size}px`;
+      size += 100;
+      
       button.style.width = `${300 + count * 5}px`;
       button.style.height = `${100 + count * 3}px`;
       
@@ -159,7 +159,7 @@
         rainbowBg.style.opacity = '0.7';
         rainbowBg.style.filter = 'brightness(1.2) saturate(1.5)';
       }, 300);
-      
+      lol.style.fontSize = `${size}px`;
       count += 1;
       
       // Speed up rotation
