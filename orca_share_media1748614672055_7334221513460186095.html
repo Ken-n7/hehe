@@ -1,36 +1,177 @@
 <!DOCTYPE html>
-
 <html>
 <head>
   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
   <title>Magic Button Extreme</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+      background-color: #000;
+    }
+    
+    .content {
+      background-color: transparent;
+      padding: 40px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      transition: all 0.5s ease-out;
+    }
+    
+    #button {
+      height: 100px;
+      width: 300px;
+      font-size: 30px;
+      cursor: pointer;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(90deg, 
+        #ff0000, #ff7f00, #ffff00, #00ff00, 
+        #0000ff, #4b0082, #9400d3, #ff0000);
+      background-size: 400% 400%;
+      color: white;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      margin-bottom: 20px;
+      animation: buttonGlow 8s ease infinite;
+    }
+    
+    @keyframes buttonGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    #button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px rgba(0,0,0,0.7);
+    }
+    
+    #lol {
+      font-size: 40px;
+      font-weight: bold;
+      text-align: center;
+      background: linear-gradient(to right, 
+        #ff0000, #ff7f00, #ffff00, #00ff00, 
+        #0000ff, #4b0082, #9400d3);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rainbow 5s linear infinite;
+      background-size: 400% 400%;
+      margin: 0;
+      padding: 10px 20px;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    
+    .rainbow-bg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200vmax;
+      height: 200vmax;
+      background: conic-gradient(
+        from 0deg,
+        #ff0000 0%, #ff0000 10%,
+        #ff7f00 15%, #ff7f00 25%,
+        #ffff00 30%, #ffff00 40%,
+        #00ff00 45%, #00ff00 55%,
+        #0000ff 60%, #0000ff 70%,
+        #4b0082 75%, #4b0082 85%,
+        #9400d3 90%, #9400d3 100%
+      );
+      animation: rotate 8s linear infinite;
+      opacity: 0.7;
+      z-index: 1;
+      filter: brightness(1.2) saturate(1.5);
+      transition: all 0.5s ease-out;
+    }
+    
+    .rainbow-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.5) 70%);
+      z-index: 2;
+      pointer-events: none;
+    }
+    
+    @keyframes rotate {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+    
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+  </style>
 </head>
 <body>
-  <button id="button" flex style="height: 100px; width: 100%; font-size: 30px">
-    pidlit pidlita adi
-  </button>
-  <h1 id="lol">
-    Hello, World!
-  </h1>
+  <div class="rainbow-bg"></div>
+  <div class="rainbow-overlay"></div>
+  <div class="content">
+    <button id="button">
+      pidlit pidlita adi
+    </button>
+    <h1 id="lol">
+      Hello, World!
+    </h1>
+  </div>
   
-</body>
-<script>
-  const lol = document.getElementById('lol');
-  const button = document.getElementById('button');
-  let count = 0;
-  let size = 30;
+  <script>
+    const lol = document.getElementById('lol');
+    const button = document.getElementById('button');
+    const rainbowBg = document.querySelector('.rainbow-bg');
+    let count = 0;
+    let size = 100;
 
-  button.addEventListener('click', function(){
-    size += 10;
-    lol.textContent = 'Pakyu ka🖕🏻';
-    lol.style.fontSize = `${size}px`;
-    button.textContent = 'pidlit pidlita pa adi 🖕🏻'
-    if(count % 2 == 0){
-      lol.style.color = 'red';
-    }else{
-      lol.style.color = 'black';
-    }
-    count += 1;
+    button.addEventListener('click', function(){
+      // Smooth size increase
+      size += 25;
+      lol.style.fontSize = `${size}px`;
+      button.style.width = `${300 + count * 5}px`;
+      button.style.height = `${100 + count * 3}px`;
+      
+      // Content changes with smooth transition
+      setTimeout(() => {
+        lol.textContent = 'Pakyu ka🖕🏻';
+        button.textContent = 'pidlit pidlita pa adi 🖕🏻';
+      }, 100);
+      
+      // Rainbow pulse effect
+      rainbowBg.style.opacity = '0.9';
+      rainbowBg.style.filter = 'brightness(1.5) saturate(2)';
+      
+      setTimeout(() => {
+        rainbowBg.style.opacity = '0.7';
+        rainbowBg.style.filter = 'brightness(1.2) saturate(1.5)';
+      }, 300);
+      
+      count += 1;
+      
+      // Speed up rotation
+      const currentDuration = parseFloat(getComputedStyle(rainbowBg).animationDuration);
+      rainbowBg.style.animationDuration = `${Math.max(2, currentDuration * 0.8)}s`;
     });
-</script>
+  </script>
+</body>
 </html>
