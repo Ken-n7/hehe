@@ -15,7 +15,7 @@
       margin: 0;
       overflow: hidden;
       position: relative;
-      background-color: white; /* Start with white */
+      background-color: white;
       font-family: 'Arial', sans-serif;
       transition: background-color 1s ease;
     }
@@ -28,15 +28,16 @@
       cursor: pointer;
       border: none;
       border-radius: 50px;
-      background: black;
+      background: #000000;
       color: white;
       transition: all 0.5s ease;
       margin-bottom: 20px;
-      z-index: 1000; /* Ensure it stays on top */
+      z-index: 1000;
+      position: relative; /* Added to ensure visibility */
     }
 
     /* Hidden Elements (Initially Invisible) */
-    .content, .fixed-text, .heart-bg, .heart-overlay, .floating-hearts {
+    .content h1, .fixed-text, .heart-bg, .heart-overlay, .floating-hearts {
       opacity: 0;
       transition: opacity 1s ease;
     }
@@ -46,7 +47,7 @@
       background-color: #1a1a2e;
     }
 
-    .loaded .content,
+    .loaded .content h1,
     .loaded .fixed-text,
     .loaded .heart-bg,
     .loaded .heart-overlay,
@@ -183,10 +184,10 @@
   
   <div class="content">
     <button id="button">Click</button>
-    <h1 id="message"></h1>
+    <h1 id="message">You're Amazing</h1>
   </div>
   
-<!--   <div class="fixed-text">Forever Yours</div> -->
+  <div class="fixed-text">Forever Yours</div>
   
   <!-- YouTube IFrame Player (Hidden) -->
   <div id="youtube-player"></div>
@@ -262,13 +263,10 @@
 
       // Message animation
       setTimeout(() => {
-        message.textContent = 'I Love You, Achi';
+        message.textContent = 'I Love You';
         message.style.fontSize = `${size}px`;
         message.style.color = '#ff6b8b';
       }, 100);
-
-      // Prevent multiple clicks
-      button.style.pointerEvents = 'none';
     });
   </script>
 </body>
