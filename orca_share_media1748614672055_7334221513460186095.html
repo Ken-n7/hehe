@@ -213,6 +213,14 @@
       height: 0;
       opacity: 0;
     }
+    
+    /* Audio element for fallback */
+    #audio-fallback {
+      position: absolute;
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
   </style>
 </head>
 <body>
@@ -237,6 +245,11 @@
   <!-- YouTube IFrame Player -->
   <div id="youtube-player"></div>
   
+  <!-- Audio fallback for mobile devices -->
+  <audio id="audio-fallback" preload="auto" loop>
+    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
+  </audio>
+  
   <script>
     // Global variables
     const message = document.getElementById('message');
@@ -245,11 +258,13 @@
     const heartsContainer = document.getElementById('hearts-container');
     const loadingScreen = document.getElementById('loading');
     const contentElements = document.querySelectorAll('.content, .fixed-text, .heart-bg, .heart-overlay, .floating-hearts');
+    const audioFallback = document.getElementById('audio-fallback');
     let count = 0;
     let size = 60;
     let player;
     let playerReady = false;
     let pageLoaded = false;
+    let audioInitialized = false;
 
     // Function to show the page content
     function showContent() {
@@ -281,11 +296,13 @@
           'fs': 0,
           'loop': 1,
           'modestbranding': 1,
-          'playsinline': 1
+          'playsinline': 1,
+          'rel': 0
         },
         events: {
           'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
+          'onStateChange': onPlayerStateChange,
+          'onError': onPlayerError
         }
       });
     }
@@ -304,11 +321,33 @@
       }
     }
 
+    // Handle player errors
+    function onPlayerError(event) {
+      console.log('YouTube player error:', event.data);
+      playerReady = true;
+      checkReadyState();
+    }
+
     // Inject YouTube API script
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // Initialize audio context on first user interaction (mobile requirement)
+    function initializeAudio() {
+      if (!audioInitialized) {
+        // Try to initialize audio context
+        if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+          const AudioContextClass = AudioContext || webkitAudioContext;
+          const audioContext = new AudioContextClass();
+          if (audioContext.state === 'suspended') {
+            audioContext.resume();
+          }
+        }
+        audioInitialized = true;
+      }
+    }
 
     // Create floating hearts
     function createHearts() {
@@ -325,15 +364,37 @@
       }, 6000);
     }
     
+    // Play audio with fallback support
+    function playAudio() {
+      initializeAudio();
+      
+      // Try YouTube player first
+      if (player && typeof player.playVideo === 'function') {
+        try {
+          player.playVideo();
+          player.setVolume(50);
+          return;
+        } catch (e) {
+          console.log('YouTube player failed:', e);
+        }
+      }
+      
+      // Fallback to HTML5 audio (though we'd need a proper audio file)
+      try {
+        audioFallback.volume = 0.5;
+        audioFallback.play().catch(e => {
+          console.log('Audio fallback failed:', e);
+        });
+      } catch (e) {
+        console.log('Audio fallback error:', e);
+      }
+    }
+    
     button.addEventListener('click', function(){
       if (!pageLoaded) return;
       
-      // Play the YouTube audio
-      if (player && typeof player.playVideo === 'function') {
-        player.playVideo();
-        // Set volume to 50% to avoid being too loud
-        player.setVolume(50);
-      }
+      // Play audio
+      playAudio();
       
       // Smooth size increase
       size += 15;
@@ -363,22 +424,19 @@
       }
       
       count += 1;
-      
-      // Change button text occasionally
-      if (count % 3 === 0) {
-        const romanticPhrases = [
-          "You're Perfect",
-          "My Heart Is Yours",
-          "Forever With You",
-          "My Soulmate",
-          "You Complete Me"
-        ];
-        button.textContent = romanticPhrases[Math.floor(Math.random() * romanticPhrases.length)];
-      }
     });
 
+    // Initialize audio on any user interaction
+    document.addEventListener('touchstart', initializeAudio, { once: true });
+    document.addEventListener('click', initializeAudio, { once: true });
+
     // Fallback in case YouTube API takes too long
-    setTimeout(checkReadyState, 5000);
+    setTimeout(() => {
+      if (!playerReady) {
+        playerReady = true;
+        checkReadyState();
+      }
+    }, 5000);
   </script>
 </body>
 </html>
