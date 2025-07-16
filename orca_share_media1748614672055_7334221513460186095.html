@@ -5,7 +5,6 @@
   <title>I Love You</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
   <style>
-    /* Initial State - Plain White Background & Black Button */
     body {
       display: flex;
       flex-direction: column;
@@ -15,64 +14,40 @@
       margin: 0;
       overflow: hidden;
       position: relative;
-      background-color: white;
-      font-family: 'Arial', sans-serif;
-      transition: background-color 1s ease;
-    }
-
-    /* Black Button (Initial State) */
-    #button {
-      height: 100px;
-      width: 300px;
-      font-size: 30px;
-      cursor: pointer;
-      border: none;
-      border-radius: 50px;
-      background: #000000;
-      color: white;
-      transition: all 0.5s ease;
-      margin-bottom: 20px;
-      z-index: 1000;
-      position: relative;
-    }
-
-    /* Hidden Elements (Initially Invisible) */
-    .content h1, .fixed-text, .heart-bg, .heart-overlay, .floating-hearts {
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
-
-    /* After Click - Romantic Theme */
-    body.loaded {
       background-color: #1a1a2e;
+      font-family: 'Arial', sans-serif;
     }
-
-    .loaded .content h1,
-    .loaded .fixed-text,
-    .loaded .heart-bg,
-    .loaded .heart-overlay,
-    .loaded .floating-hearts {
-      opacity: 1;
-    }
-
-    /* Romantic Button Style (After Click) */
-    .loaded #button {
-      background: linear-gradient(90deg, 
-        #ff6b8b, #ff8e9e, #ffb3c1, #ffd8e1);
-      background-size: 400% 400%;
+    
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #1a1a2e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
       color: white;
-      text-shadow: 0 0 5px rgba(0,0,0,0.3);
-      box-shadow: 0 0 30px rgba(255, 107, 139, 0.3);
-      animation: buttonGlow 8s ease infinite;
+      font-size: 24px;
+      flex-direction: column;
     }
-
-    @keyframes buttonGlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #ff6b8b;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
     }
-
-    /* Rest of the Romantic Theme Styles */
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
     .content {
       background-color: transparent;
       padding: 40px;
@@ -81,19 +56,58 @@
       flex-direction: column;
       align-items: center;
       position: relative;
+      transition: all 0.5s ease-out;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s;
     }
-
+    
+    .content.loaded {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    #button {
+      height: 100px;
+      width: 300px;
+      font-size: 30px;
+      cursor: pointer;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(90deg, 
+        #ff6b8b, #ff8e9e, #ffb3c1, #ffd8e1);
+      background-size: 400% 400%;
+      color: white;
+      text-shadow: 0 0 5px rgba(0,0,0,0.3);
+      box-shadow: 0 0 30px rgba(255, 107, 139, 0.3);
+      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      margin-bottom: 20px;
+      animation: buttonGlow 8s ease infinite;
+    }
+    
+    @keyframes buttonGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    #button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px rgba(255, 107, 139, 0.5);
+    }
+    
     #message {
       font-size: 60px;
       font-weight: bold;
       text-align: center;
       color: white;
+      background-size: 400% 400%;
       margin: 0;
       padding: 10px 20px;
       text-shadow: 0 0 10px rgba(255,255,255,0.3);
       transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     }
-
+    
     .fixed-text {
       position: fixed;
       bottom: 20px;
@@ -105,8 +119,14 @@
       font-family: 'Brush Script MT', cursive;
       font-size: 24px;
       z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
-
+    
+    .fixed-text.loaded {
+      opacity: 1;
+    }
+    
     .heart-bg {
       position: fixed;
       top: 50%;
@@ -121,8 +141,14 @@
         rgba(255,216,225,0.05) 100%);
       z-index: 1;
       filter: blur(20px);
+      transition: all 0.5s ease-out;
+      opacity: 0;
     }
-
+    
+    .heart-bg.loaded {
+      opacity: 1;
+    }
+    
     .heart-overlay {
       position: fixed;
       top: 0;
@@ -132,8 +158,14 @@
       background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(26,26,46,0.7) 70%);
       z-index: 2;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
-
+    
+    .heart-overlay.loaded {
+      opacity: 1;
+    }
+    
     .floating-hearts {
       position: absolute;
       width: 100%;
@@ -141,8 +173,14 @@
       overflow: hidden;
       z-index: 3;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
-
+    
+    .floating-hearts.loaded {
+      opacity: 1;
+    }
+    
     .heart {
       position: absolute;
       opacity: 0;
@@ -150,7 +188,7 @@
       color: #ff6b8b;
       animation: float 6s ease-in-out infinite;
     }
-
+    
     @keyframes float {
       0% {
         transform: translateY(0) rotate(0deg);
@@ -167,34 +205,110 @@
         opacity: 0;
       }
     }
+    
+    /* Hide the YouTube player */
+    #youtube-player {
+      position: absolute;
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
   </style>
 </head>
 <body>
+  <div id="loading">
+    <div class="loader"></div>
+    <p>Loading romantic experience...</p>
+  </div>
+  
   <div class="heart-bg"></div>
   <div class="heart-overlay"></div>
   <div class="floating-hearts" id="hearts-container"></div>
-  
   <div class="content">
-    <button id="button">Click</button>
-    <h1 id="message">You're Amazing</h1>
+    <button id="button">
+      Click
+    </button>
+    <h1 id="message">
+      You're Amazing
+    </h1>
   </div>
-  
   <div class="fixed-text">Forever Yours</div>
   
-  <!-- Audio Element -->
-  <audio id="audio" preload="auto">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <!-- YouTube IFrame Player -->
+  <div id="youtube-player"></div>
   
   <script>
-    const button = document.getElementById('button');
+    // Global variables
     const message = document.getElementById('message');
-    const body = document.body;
+    const button = document.getElementById('button');
+    const heartBg = document.querySelector('.heart-bg');
     const heartsContainer = document.getElementById('hearts-container');
-    const audio = document.getElementById('audio');
+    const loadingScreen = document.getElementById('loading');
+    const contentElements = document.querySelectorAll('.content, .fixed-text, .heart-bg, .heart-overlay, .floating-hearts');
+    let count = 0;
     let size = 60;
-    let heartsInterval;
+    let player;
+    let playerReady = false;
+    let pageLoaded = false;
+
+    // Function to show the page content
+    function showContent() {
+      contentElements.forEach(el => el.classList.add('loaded'));
+      loadingScreen.style.display = 'none';
+      pageLoaded = true;
+      
+      // Start creating hearts
+      setInterval(createHearts, 300);
+    }
+
+    // Function to check if we can show the content
+    function checkReadyState() {
+      if (playerReady) {
+        showContent();
+      }
+    }
+
+    // Load YouTube IFrame API
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('youtube-player', {
+        height: '0',
+        width: '0',
+        videoId: '75-Com9Bo_s',
+        playerVars: {
+          'autoplay': 0,
+          'controls': 0,
+          'disablekb': 1,
+          'fs': 0,
+          'loop': 1,
+          'modestbranding': 1,
+          'playsinline': 1
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    // When player is ready
+    function onPlayerReady(event) {
+      playerReady = true;
+      checkReadyState();
+    }
+
+    // Handle player state changes
+    function onPlayerStateChange(event) {
+      // If video ends, restart it (for when it's played)
+      if (event.data === YT.PlayerState.ENDED) {
+        player.playVideo();
+      }
+    }
+
+    // Inject YouTube API script
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     // Create floating hearts
     function createHearts() {
@@ -210,43 +324,61 @@
         heart.remove();
       }, 6000);
     }
-
-    // Button Click Handler
-    button.addEventListener('click', function() {
-      // Play audio
-      audio.volume = 0.5; // Set volume to 50%
-      audio.play().catch(e => {
-        console.log("Audio play failed:", e);
-        // Fallback for browsers that block autoplay
-        button.textContent = "Click again to play music";
-        button.onclick = () => {
-          audio.play();
-          activateRomanticMode();
-        };
-      });
+    
+    button.addEventListener('click', function(){
+      if (!pageLoaded) return;
       
-      activateRomanticMode();
-    });
-
-    function activateRomanticMode() {
-      // Activate romantic theme
-      body.classList.add('loaded');
-
-      // Start floating hearts animation
-      heartsInterval = setInterval(createHearts, 300);
-
-      // Message animation
+      // Play the YouTube audio
+      if (player && typeof player.playVideo === 'function') {
+        player.playVideo();
+        // Set volume to 50% to avoid being too loud
+        player.setVolume(50);
+      }
+      
+      // Smooth size increase
+      size += 15;
+      
+      button.style.width = `${300 + count * 5}px`;
+      button.style.height = `${100 + count * 3}px`;
+      
+      // Content changes with smooth transition
       setTimeout(() => {
         message.textContent = 'I Love You';
         message.style.fontSize = `${size}px`;
         message.style.color = '#ff6b8b';
       }, 100);
-    }
-
-    // Clean up intervals when page is closed
-    window.addEventListener('beforeunload', function() {
-      clearInterval(heartsInterval);
+      
+      // Heart pulse effect
+      heartBg.style.opacity = '0.9';
+      heartBg.style.filter = 'blur(30px) brightness(1.5)';
+      
+      setTimeout(() => {
+        heartBg.style.opacity = '1';
+        heartBg.style.filter = 'blur(20px) brightness(1.2)';
+      }, 300);
+      
+      // Create extra hearts on click
+      for (let i = 0; i < 10; i++) {
+        setTimeout(createHearts, i * 100);
+      }
+      
+      count += 1;
+      
+      // Change button text occasionally
+      if (count % 3 === 0) {
+        const romanticPhrases = [
+          "You're Perfect",
+          "My Heart Is Yours",
+          "Forever With You",
+          "My Soulmate",
+          "You Complete Me"
+        ];
+        button.textContent = romanticPhrases[Math.floor(Math.random() * romanticPhrases.length)];
+      }
     });
+
+    // Fallback in case YouTube API takes too long
+    setTimeout(checkReadyState, 5000);
   </script>
 </body>
 </html>
