@@ -348,12 +348,22 @@
       }
     }
 
-    // Create floating hearts
+    // Create floating hearts just above the button spread across screen
     function createHearts() {
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.innerHTML = '❤';
-      heart.style.left = Math.random() * 100 + 'vw';
+      
+      // Get button position relative to viewport
+      const buttonRect = button.getBoundingClientRect();
+      const buttonTop = buttonRect.top;
+      
+      // Create hearts spread across the full screen width, just above the button
+      const heartX = Math.random() * window.innerWidth; // Full screen width
+      const heartY = buttonTop - 80 + (Math.random() * 60); // 80px above button with 60px variation
+      
+      heart.style.left = heartX + 'px';
+      heart.style.top = heartY + 'px';
       heart.style.animationDuration = (4 + Math.random() * 6) + 's';
       heart.style.fontSize = (20 + Math.random() * 30) + 'px';
       heartsContainer.appendChild(heart);
