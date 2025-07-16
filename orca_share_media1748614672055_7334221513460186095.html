@@ -144,6 +144,14 @@
         opacity: 0;
       }
     }
+    
+    /* Hide the YouTube player */
+    #youtube-player {
+      position: absolute;
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
   </style>
 </head>
 <body>
@@ -160,6 +168,9 @@
   </div>
   <div class="fixed-text">Forever Yours</div>
   
+  <!-- YouTube IFrame Player -->
+  <div id="youtube-player"></div>
+  
   <script>
     const message = document.getElementById('message');
     const button = document.getElementById('button');
@@ -167,6 +178,39 @@
     const heartsContainer = document.getElementById('hearts-container');
     let count = 0;
     let size = 60;
+    let player;
+
+    // Load YouTube IFrame API
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('youtube-player', {
+        height: '0',
+        width: '0',
+        videoId: '75-Com9Bo_s',
+        playerVars: {
+          'autoplay': 0,
+          'controls': 0,
+          'disablekb': 1,
+          'fs': 0,
+          'loop': 1,
+          'modestbranding': 1,
+          'playsinline': 1
+        },
+        events: {
+          'onReady': onPlayerReady
+        }
+      });
+    }
+
+    // When player is ready
+    function onPlayerReady(event) {
+      // Player is ready, we can control it now
+    }
+
+    // Inject YouTube API script
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     // Create floating hearts
     function createHearts() {
@@ -187,6 +231,13 @@
     setInterval(createHearts, 300);
     
     button.addEventListener('click', function(){
+      // Play the YouTube audio
+      if (player && typeof player.playVideo === 'function') {
+        player.playVideo();
+        // Set volume to 50% to avoid being too loud
+        player.setVolume(50);
+      }
+      
       // Smooth size increase
       size += 15;
       
