@@ -55,13 +55,8 @@
       opacity: 1;
     }
 
-    /* Hide button after click */
+    /* Romantic Button Style (After Click) */
     .loaded #button {
-      display: none;
-    }
-
-    /* Romantic Button Style (Before Click) */
-    #button:hover {
       background: linear-gradient(90deg, 
         #ff6b8b, #ff8e9e, #ffb3c1, #ffd8e1);
       background-size: 400% 400%;
@@ -172,14 +167,6 @@
         opacity: 0;
       }
     }
-
-    /* Hidden YouTube Player */
-    #youtube-player {
-      position: absolute;
-      width: 0;
-      height: 0;
-      opacity: 0;
-    }
   </style>
 </head>
 <body>
@@ -194,47 +181,20 @@
   
   <div class="fixed-text">Forever Yours</div>
   
-  <!-- YouTube IFrame Player (Hidden) -->
-  <div id="youtube-player"></div>
+  <!-- Audio Element -->
+  <audio id="audio" preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
   
   <script>
     const button = document.getElementById('button');
     const message = document.getElementById('message');
     const body = document.body;
     const heartsContainer = document.getElementById('hearts-container');
-    let player;
-
-    // Load YouTube IFrame API
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('youtube-player', {
-        height: '0',
-        width: '0',
-        videoId: '75-Com9Bo_s',
-        playerVars: {
-          'autoplay': 0,
-          'controls': 0,
-          'disablekb': 1,
-          'fs': 0,
-          'loop': 1,
-          'modestbranding': 1,
-          'playsinline': 1
-        },
-        events: {
-          'onReady': onPlayerReady
-        }
-      });
-    }
-
-    // When YouTube player is ready
-    function onPlayerReady(event) {
-      // Player is ready, we can control it now
-    }
-
-    // Inject YouTube API script
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    const audio = document.getElementById('audio');
+    let size = 60;
+    let heartsInterval;
 
     // Create floating hearts
     function createHearts() {
@@ -253,23 +213,39 @@
 
     // Button Click Handler
     button.addEventListener('click', function() {
-      // Play YouTube audio
-      if (player && typeof player.playVideo === 'function') {
-        player.playVideo();
-        player.setVolume(50); // Lower volume
-      }
+      // Play audio
+      audio.volume = 0.5; // Set volume to 50%
+      audio.play().catch(e => {
+        console.log("Audio play failed:", e);
+        // Fallback for browsers that block autoplay
+        button.textContent = "Click again to play music";
+        button.onclick = () => {
+          audio.play();
+          activateRomanticMode();
+        };
+      });
+      
+      activateRomanticMode();
+    });
 
+    function activateRomanticMode() {
       // Activate romantic theme
       body.classList.add('loaded');
 
       // Start floating hearts animation
-      setInterval(createHearts, 300);
+      heartsInterval = setInterval(createHearts, 300);
 
       // Message animation
       setTimeout(() => {
-        message.textContent = 'I Love You, Achi';
+        message.textContent = 'I Love You';
+        message.style.fontSize = `${size}px`;
         message.style.color = '#ff6b8b';
       }, 100);
+    }
+
+    // Clean up intervals when page is closed
+    window.addEventListener('beforeunload', function() {
+      clearInterval(heartsInterval);
     });
   </script>
 </body>
