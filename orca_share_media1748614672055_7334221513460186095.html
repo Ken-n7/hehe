@@ -33,7 +33,7 @@
       transition: all 0.5s ease;
       margin-bottom: 20px;
       z-index: 1000;
-      position: relative; /* Added to ensure visibility */
+      position: relative;
     }
 
     /* Hidden Elements (Initially Invisible) */
@@ -55,8 +55,13 @@
       opacity: 1;
     }
 
-    /* Romantic Button Style (After Click) */
+    /* Hide button after click */
     .loaded #button {
+      display: none;
+    }
+
+    /* Romantic Button Style (Before Click) */
+    #button:hover {
       background: linear-gradient(90deg, 
         #ff6b8b, #ff8e9e, #ffb3c1, #ffd8e1);
       background-size: 400% 400%;
@@ -198,7 +203,6 @@
     const body = document.body;
     const heartsContainer = document.getElementById('hearts-container');
     let player;
-    let size = 60;
 
     // Load YouTube IFrame API
     function onYouTubeIframeAPIReady() {
@@ -263,8 +267,7 @@
 
       // Message animation
       setTimeout(() => {
-        message.textContent = 'I Love You';
-        message.style.fontSize = `${size}px`;
+        message.textContent = 'I Love You, Achi';
         message.style.color = '#ff6b8b';
       }, 100);
     });
