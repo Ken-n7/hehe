@@ -18,6 +18,36 @@
       font-family: 'Arial', sans-serif;
     }
     
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #1a1a2e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      color: white;
+      font-size: 24px;
+      flex-direction: column;
+    }
+    
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #ff6b8b;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
     .content {
       background-color: transparent;
       padding: 40px;
@@ -27,6 +57,14 @@
       align-items: center;
       position: relative;
       transition: all 0.5s ease-out;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s;
+    }
+    
+    .content.loaded {
+      opacity: 1;
+      visibility: visible;
     }
     
     #button {
@@ -81,6 +119,12 @@
       font-family: 'Brush Script MT', cursive;
       font-size: 24px;
       z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    .fixed-text.loaded {
+      opacity: 1;
     }
     
     .heart-bg {
@@ -98,6 +142,11 @@
       z-index: 1;
       filter: blur(20px);
       transition: all 0.5s ease-out;
+      opacity: 0;
+    }
+    
+    .heart-bg.loaded {
+      opacity: 1;
     }
     
     .heart-overlay {
@@ -109,6 +158,12 @@
       background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(26,26,46,0.7) 70%);
       z-index: 2;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    .heart-overlay.loaded {
+      opacity: 1;
     }
     
     .floating-hearts {
@@ -118,6 +173,12 @@
       overflow: hidden;
       z-index: 3;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    .floating-hearts.loaded {
+      opacity: 1;
     }
     
     .heart {
@@ -155,6 +216,11 @@
   </style>
 </head>
 <body>
+  <div id="loading">
+    <div class="loader"></div>
+    <p>Loading romantic experience...</p>
+  </div>
+  
   <div class="heart-bg"></div>
   <div class="heart-overlay"></div>
   <div class="floating-hearts" id="hearts-container"></div>
@@ -163,7 +229,7 @@
       Click
     </button>
     <h1 id="message">
-      
+      You're Amazing
     </h1>
   </div>
   <div class="fixed-text">Forever Yours</div>
@@ -172,13 +238,35 @@
   <div id="youtube-player"></div>
   
   <script>
+    // Global variables
     const message = document.getElementById('message');
     const button = document.getElementById('button');
     const heartBg = document.querySelector('.heart-bg');
     const heartsContainer = document.getElementById('hearts-container');
+    const loadingScreen = document.getElementById('loading');
+    const contentElements = document.querySelectorAll('.content, .fixed-text, .heart-bg, .heart-overlay, .floating-hearts');
     let count = 0;
     let size = 60;
     let player;
+    let playerReady = false;
+    let pageLoaded = false;
+
+    // Function to show the page content
+    function showContent() {
+      contentElements.forEach(el => el.classList.add('loaded'));
+      loadingScreen.style.display = 'none';
+      pageLoaded = true;
+      
+      // Start creating hearts
+      setInterval(createHearts, 300);
+    }
+
+    // Function to check if we can show the content
+    function checkReadyState() {
+      if (playerReady) {
+        showContent();
+      }
+    }
 
     // Load YouTube IFrame API
     function onYouTubeIframeAPIReady() {
@@ -196,14 +284,24 @@
           'playsinline': 1
         },
         events: {
-          'onReady': onPlayerReady
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
         }
       });
     }
 
     // When player is ready
     function onPlayerReady(event) {
-      // Player is ready, we can control it now
+      playerReady = true;
+      checkReadyState();
+    }
+
+    // Handle player state changes
+    function onPlayerStateChange(event) {
+      // If video ends, restart it (for when it's played)
+      if (event.data === YT.PlayerState.ENDED) {
+        player.playVideo();
+      }
     }
 
     // Inject YouTube API script
@@ -227,10 +325,9 @@
       }, 6000);
     }
     
-    // Start creating hearts
-    setInterval(createHearts, 300);
-    
     button.addEventListener('click', function(){
+      if (!pageLoaded) return;
+      
       // Play the YouTube audio
       if (player && typeof player.playVideo === 'function') {
         player.playVideo();
@@ -279,6 +376,9 @@
         button.textContent = romanticPhrases[Math.floor(Math.random() * romanticPhrases.length)];
       }
     });
+
+    // Fallback in case YouTube API takes too long
+    setTimeout(checkReadyState, 5000);
   </script>
 </body>
 </html>
