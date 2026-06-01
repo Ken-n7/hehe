@@ -2,8 +2,7 @@
 <html>
 <head>
   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
-  <title>I Love You</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+  <title>Magic Button Extreme</title>
   <style>
     body {
       display: flex;
@@ -14,38 +13,7 @@
       margin: 0;
       overflow: hidden;
       position: relative;
-      background-color: #1a1a2e;
-      font-family: 'Arial', sans-serif;
-    }
-    
-    #loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #1a1a2e;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      color: white;
-      font-size: 24px;
-      flex-direction: column;
-    }
-    
-    .loader {
-      width: 50px;
-      height: 50px;
-      border: 5px solid #ff6b8b;
-      border-radius: 50%;
-      border-top-color: transparent;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+      background-color: #000;
     }
     
     .content {
@@ -57,14 +25,6 @@
       align-items: center;
       position: relative;
       transition: all 0.5s ease-out;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.5s ease, visibility 0.5s;
-    }
-    
-    .content.loaded {
-      opacity: 1;
-      visibility: visible;
     }
     
     #button {
@@ -75,11 +35,12 @@
       border: none;
       border-radius: 50px;
       background: linear-gradient(90deg, 
-        #ff6b8b, #ff8e9e, #ffb3c1, #ffd8e1);
+        #ff0000, #ff7f00, #ffff00, #00ff00, 
+        #0000ff, #4b0082, #9400d3, #ff0000);
       background-size: 400% 400%;
       color: white;
-      text-shadow: 0 0 5px rgba(0,0,0,0.3);
-      box-shadow: 0 0 30px rgba(255, 107, 139, 0.3);
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
       transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
       margin-bottom: 20px;
       animation: buttonGlow 8s ease infinite;
@@ -93,11 +54,11 @@
     
     #button:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 40px rgba(255, 107, 139, 0.5);
+      box-shadow: 0 0 40px rgba(0,0,0,0.7);
     }
     
-    #message {
-      font-size: 60px;
+    #lol {
+      font-size: 100px;
       font-weight: bold;
       text-align: center;
       color: white;
@@ -107,345 +68,118 @@
       text-shadow: 0 0 10px rgba(255,255,255,0.3);
       transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     }
-    
     .fixed-text {
       position: fixed;
       bottom: 20px;
       right: 20px;
       background: transparent;
-      color: rgba(255,255,255,0.7);
+      color: #fff;
       padding: 10px 15px;
       border-radius: 5px;
-      font-family: 'Brush Script MT', cursive;
-      font-size: 24px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
       z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.5s ease;
     }
     
-    .fixed-text.loaded {
-      opacity: 1;
-    }
-    
-    .heart-bg {
+    .rainbow-bg {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       width: 200vmax;
       height: 200vmax;
-      background: radial-gradient(circle, 
-        rgba(255,107,139,0.2) 0%, 
-        rgba(255,142,158,0.15) 30%, 
-        rgba(255,179,193,0.1) 60%, 
-        rgba(255,216,225,0.05) 100%);
+      background: conic-gradient(
+        from 0deg,
+        #ff0000 0%, #ff0000 10%,
+        #ff7f00 15%, #ff7f00 25%,
+        #ffff00 30%, #ffff00 40%,
+        #00ff00 45%, #00ff00 55%,
+        #0000ff 60%, #0000ff 70%,
+        #4b0082 75%, #4b0082 85%,
+        #9400d3 90%, #9400d3 100%
+      );
+      animation: rotate 8s linear infinite;
+      opacity: 0.7;
       z-index: 1;
-      filter: blur(20px);
+      filter: brightness(1.2) saturate(1.5);
       transition: all 0.5s ease-out;
-      opacity: 0;
     }
     
-    .heart-bg.loaded {
-      opacity: 1;
-    }
-    
-    .heart-overlay {
+    .rainbow-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(26,26,46,0.7) 70%);
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.5) 70%);
       z-index: 2;
       pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s ease;
     }
     
-    .heart-overlay.loaded {
-      opacity: 1;
-    }
-    
-    .floating-hearts {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    
-    .floating-hearts.loaded {
-      opacity: 1;
-    }
-    
-    .heart {
-      position: absolute;
-      opacity: 0;
-      font-size: 24px;
-      color: #ff6b8b;
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0;
+    @keyframes rotate {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
       }
-      10% {
-        opacity: 1;
-      }
-      90% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-500px) rotate(360deg);
-        opacity: 0;
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
       }
     }
     
-    /* Hide the YouTube player */
-    #youtube-player {
-      position: absolute;
-      width: 0;
-      height: 0;
-      opacity: 0;
-    }
-    
-    /* Audio element for fallback */
-    #audio-fallback {
-      position: absolute;
-      width: 0;
-      height: 0;
-      opacity: 0;
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
     }
   </style>
 </head>
 <body>
-  <div id="loading">
-    <div class="loader"></div>
-    <p>Loading experience...</p>
-  </div>
-  
-  <div class="heart-bg"></div>
-  <div class="heart-overlay"></div>
-  <div class="floating-hearts" id="hearts-container"></div>
+  <div class="rainbow-bg"></div>
+  <div class="rainbow-overlay"></div>
   <div class="content">
     <button id="button">
-      Click
+      Click Here!
     </button>
-    <h1 id="message">
+    <h1 id="lol">
+      Hello, World!
     </h1>
   </div>
-<!--   <div class="fixed-text">Forever Yours</div> -->
-  
-  <!-- YouTube IFrame Player -->
-  <div id="youtube-player"></div>
-  
-  <!-- Audio fallback for mobile devices -->
-  <audio id="audio-fallback" preload="auto" loop>
-    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
-  </audio>
+  <div class="fixed-text">K.</div>
   
   <script>
-    // Global variables
-    const message = document.getElementById('message');
+    const lol = document.getElementById('lol');
     const button = document.getElementById('button');
-    const heartBg = document.querySelector('.heart-bg');
-    const heartsContainer = document.getElementById('hearts-container');
-    const loadingScreen = document.getElementById('loading');
-    const contentElements = document.querySelectorAll('.content, .fixed-text, .heart-bg, .heart-overlay, .floating-hearts');
-    const audioFallback = document.getElementById('audio-fallback');
+    const rainbowBg = document.querySelector('.rainbow-bg');
     let count = 0;
-    let size = 60;
-    let player;
-    let playerReady = false;
-    let pageLoaded = false;
-    let audioInitialized = false;
+    let size = 250;
 
-    // Function to show the page content
-    function showContent() {
-      contentElements.forEach(el => el.classList.add('loaded'));
-      loadingScreen.style.display = 'none';
-      pageLoaded = true;
-      
-      // Start creating hearts
-      setInterval(createHearts, 300);
-    }
-
-    // Function to check if we can show the content
-    function checkReadyState() {
-      if (playerReady) {
-        showContent();
-      }
-    }
-
-    // Load YouTube IFrame API
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('youtube-player', {
-        height: '0',
-        width: '0',
-        videoId: '75-Com9Bo_s',
-        playerVars: {
-          'autoplay': 0,
-          'controls': 0,
-          'disablekb': 1,
-          'fs': 0,
-          'loop': 1,
-          'modestbranding': 1,
-          'playsinline': 1,
-          'rel': 0
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange,
-          'onError': onPlayerError
-        }
-      });
-    }
-
-    // When player is ready
-    function onPlayerReady(event) {
-      playerReady = true;
-      checkReadyState();
-    }
-
-    // Handle player state changes
-    function onPlayerStateChange(event) {
-      // If video ends, restart it (for when it's played)
-      if (event.data === YT.PlayerState.ENDED) {
-        player.playVideo();
-      }
-    }
-
-    // Handle player errors
-    function onPlayerError(event) {
-      console.log('YouTube player error:', event.data);
-      playerReady = true;
-      checkReadyState();
-    }
-
-    // Inject YouTube API script
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    // Initialize audio context on first user interaction (mobile requirement)
-    function initializeAudio() {
-      if (!audioInitialized) {
-        // Try to initialize audio context
-        if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
-          const AudioContextClass = AudioContext || webkitAudioContext;
-          const audioContext = new AudioContextClass();
-          if (audioContext.state === 'suspended') {
-            audioContext.resume();
-          }
-        }
-        audioInitialized = true;
-      }
-    }
-
-    // Create floating hearts just above the button spread across screen
-    function createHearts() {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.innerHTML = '❤';
-      
-      // Get button position relative to viewport
-      const buttonRect = button.getBoundingClientRect();
-      const buttonTop = buttonRect.top;
-      
-      // Create hearts spread across the full screen width, just above the button
-      const heartX = Math.random() * window.innerWidth; // Full screen width
-      const heartY = buttonTop - 80 + (Math.random() * 60); // 80px above button with 60px variation
-      
-      heart.style.left = heartX + 'px';
-      heart.style.top = heartY + 'px';
-      heart.style.animationDuration = (4 + Math.random() * 6) + 's';
-      heart.style.fontSize = (20 + Math.random() * 30) + 'px';
-      heartsContainer.appendChild(heart);
-      
-      setTimeout(() => {
-        heart.remove();
-      }, 6000);
-    }
-    
-    // Play audio with fallback support
-    function playAudio() {
-      initializeAudio();
-      
-      // Try YouTube player first
-      if (player && typeof player.playVideo === 'function') {
-        try {
-          player.playVideo();
-          player.setVolume(50);
-          return;
-        } catch (e) {
-          console.log('YouTube player failed:', e);
-        }
-      }
-      
-      // Fallback to HTML5 audio (though we'd need a proper audio file)
-      try {
-        audioFallback.volume = 0.5;
-        audioFallback.play().catch(e => {
-          console.log('Audio fallback failed:', e);
-        });
-      } catch (e) {
-        console.log('Audio fallback error:', e);
-      }
-    }
-    
     button.addEventListener('click', function(){
-      if (!pageLoaded) return;
-      
-      // Play audio
-      playAudio();
-      
       // Smooth size increase
-      size += 15;
+      size += 25;
       
       button.style.width = `${300 + count * 5}px`;
       button.style.height = `${100 + count * 3}px`;
       
       // Content changes with smooth transition
       setTimeout(() => {
-        message.textContent = 'I Love You';
-        message.style.fontSize = `${size}px`;
-        message.style.color = '#ff6b8b';
+        lol.textContent = '🖕🏻';
+        //button.textContent = 'Click Here To Grow Your 🖕🏻';
+        lol.style.fontSize = `${size}px`;
       }, 100);
       
-      // Heart pulse effect
-      heartBg.style.opacity = '0.9';
-      heartBg.style.filter = 'blur(30px) brightness(1.5)';
+      // Rainbow pulse effect
+      rainbowBg.style.opacity = '0.9';
+      rainbowBg.style.filter = 'brightness(1.5) saturate(2)';
       
       setTimeout(() => {
-        heartBg.style.opacity = '1';
-        heartBg.style.filter = 'blur(20px) brightness(1.2)';
+        rainbowBg.style.opacity = '0.7';
+        rainbowBg.style.filter = 'brightness(1.2) saturate(1.5)';
       }, 300);
       
-      // Create extra hearts on click
-      for (let i = 0; i < 10; i++) {
-        setTimeout(createHearts, i * 100);
-      }
-      
       count += 1;
+      
+      // Speed up rotation
+      const currentDuration = parseFloat(getComputedStyle(rainbowBg).animationDuration);
+      rainbowBg.style.animationDuration = `${Math.max(2, currentDuration * 0.8)}s`;
     });
-
-    // Initialize audio on any user interaction
-    document.addEventListener('touchstart', initializeAudio, { once: true });
-    document.addEventListener('click', initializeAudio, { once: true });
-
-    // Fallback in case YouTube API takes too long
-    setTimeout(() => {
-      if (!playerReady) {
-        playerReady = true;
-        checkReadyState();
-      }
-    }, 5000);
   </script>
 </body>
 </html>
