@@ -1,0 +1,227 @@
+#loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+  background: linear-gradient(135deg, #0a0010, #00001a, #0a0010, #001a0a, #0a000a);
+  background-size: 400% 400%;
+  animation: loaderBg 6s ease infinite;
+  overflow: hidden;
+}
+
+#loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 40%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 45%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 40% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(2px 2px at 90% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 10%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(2px 2px at 55% 90%, rgba(255,255,255,0.5) 0%, transparent 100%);
+  animation: starTwinkle 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes loaderBg {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes starTwinkle {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
+
+#loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-orbs {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  transform-style: preserve-3d;
+}
+
+.orb {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 5px solid transparent;
+}
+
+.orb:nth-child(1) {
+  border-top-color: #ff0055;
+  border-bottom-color: #ff0055;
+  animation: spinX 1.2s linear infinite;
+  filter: drop-shadow(0 0 8px #ff0055);
+}
+
+.orb:nth-child(2) {
+  border-left-color: #00ffcc;
+  border-right-color: #00ffcc;
+  animation: spinY 1.8s linear infinite;
+  filter: drop-shadow(0 0 8px #00ffcc);
+}
+
+.orb:nth-child(3) {
+  inset: 20px;
+  border-top-color: #ffff00;
+  border-right-color: #ffff00;
+  animation: spinZ 1s linear infinite;
+  filter: drop-shadow(0 0 8px #ffff00);
+}
+
+.orb:nth-child(4) {
+  inset: 40px;
+  border-bottom-color: #cc00ff;
+  border-left-color: #cc00ff;
+  animation: spinZ 0.7s linear infinite reverse;
+  filter: drop-shadow(0 0 8px #cc00ff);
+}
+
+@keyframes spinX { to { transform: rotateX(360deg); } }
+@keyframes spinY { to { transform: rotateY(360deg); } }
+@keyframes spinZ { to { transform: rotateZ(360deg); } }
+
+.content {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.content.visible {
+  opacity: 1;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  background-color: #000;
+}
+
+.content {
+  background-color: transparent;
+  padding: 40px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: all 0.5s ease-out;
+}
+
+#button {
+  height: 100px;
+  width: 300px;
+  font-size: 30px;
+  cursor: pointer;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(90deg,
+    #ff0000, #ff7f00, #ffff00, #00ff00,
+    #0000ff, #4b0082, #9400d3, #ff0000);
+  background-size: 400% 400%;
+  color: white;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  margin-bottom: 20px;
+  animation: buttonGlow 8s ease infinite;
+}
+
+@keyframes buttonGlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+#button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(0,0,0,0.7);
+}
+
+.finger {
+  position: fixed;
+  pointer-events: none;
+  user-select: none;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes fingerPop {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  30%  { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  70%  { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+}
+
+.fixed-text {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: transparent;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  z-index: 1000;
+}
+
+.rainbow-bg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200vmax;
+  height: 200vmax;
+  background: conic-gradient(
+    from 0deg,
+    #ff0000 0%, #ff0000 10%,
+    #ff7f00 15%, #ff7f00 25%,
+    #ffff00 30%, #ffff00 40%,
+    #00ff00 45%, #00ff00 55%,
+    #0000ff 60%, #0000ff 70%,
+    #4b0082 75%, #4b0082 85%,
+    #9400d3 90%, #9400d3 100%
+  );
+  animation: rotate 8s linear infinite;
+  opacity: 0.7;
+  z-index: 1;
+  filter: brightness(1.2) saturate(1.5);
+  transition: all 0.5s ease-out;
+}
+
+.rainbow-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.5) 70%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}

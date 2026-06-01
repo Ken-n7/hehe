@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "*.html", 
+      "src": "**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/orca_share_media1748614672055_7334221513460186095.html"
+      "dest": "/$1"
     }
   ]
 }
